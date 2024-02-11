@@ -20,6 +20,6 @@ export class User {
   @Column({ default: '' })
   avatar: string;
 
-  @OneToMany(type => Collection, (collection) => collection.owner)
+  @OneToMany((type) => Collection, (collection) => collection.owner)
   collections: Collection[];
 }

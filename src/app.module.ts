@@ -17,7 +17,7 @@ import { AuthModule } from './auth/auth.module';
       username: 'test123',
       password: 'Test123456789',
       database: 'test123',
-      synchronize: true,
+      synchronize: true, // prod 需要注意
       autoLoadEntities: true,
     }),
     UserModule,
