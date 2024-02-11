@@ -5,7 +5,7 @@
 ```sh
 # 如果存在
 rm -rf package-lock.json
+# 配置环境
 npm i -g pnpm
 pnpm install
-
 ```
