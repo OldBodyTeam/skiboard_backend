@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UsePipes } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, UsePipes } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ValidationPipe } from 'src/pipe/validation/validation.pipe';
 import { LoginUserDto } from './dto/login.dto';
@@ -14,6 +14,7 @@ export class AuthController {
   @Public()
   @Post('login')
   @UsePipes(new ValidationPipe())
+  @HttpCode(200)
   login(@Body() loginInfo: LoginUserDto) {
     return this.authService.validateUser(
       loginInfo.email_name,
@@ -24,6 +25,7 @@ export class AuthController {
   @Public()
   @Post('register')
   @UsePipes(new ValidationPipe())
+  @HttpCode(200)
   register(@Body() registerInfo: RegisterUserDto) {
     return this.authService.addUser(
       registerInfo.username,

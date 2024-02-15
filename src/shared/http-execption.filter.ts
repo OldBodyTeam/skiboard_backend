@@ -30,6 +30,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       code: -1,
       date: nowTime,
       path: request.url,
+      status,
     };
     // 将异常记录到logger中
     // this.logger.error(

@@ -12,7 +12,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email_name: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne(email_name);
+    const user = await this.usersService.findOneByEmail(email_name);
     // bcrypt.compare(pass, user.password);
     if (user) {
       if (bcrypt.compareSync(pass, user.password)) {
@@ -39,8 +39,8 @@ export class AuthService {
 
   async addUser(username: string, email: string, pass: string): Promise<any> {
     // const bcrypt = require('bcrypt');
-    const users = await this.usersService.findOne(username);
-    const emails = await this.usersService.findOne(email);
+    const users = await this.usersService.findOneByEmail(username);
+    const emails = await this.usersService.findOneByEmail(email);
     if (users) {
       const errors = { username: 'Username must be unique.' };
       throw new HttpException(

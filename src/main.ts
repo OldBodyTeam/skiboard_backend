@@ -3,9 +3,14 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { TransformInterceptor } from './shared/transform.interceptor';
 import { HttpExceptionFilter } from './shared/http-execption.filter';
+import dotenv from 'dotenv';
+import path from 'node:path';
 
+dotenv.config({ path: path.resolve(process.cwd(), '.env.development') });
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+  });
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
   const options = new DocumentBuilder()
@@ -15,7 +20,9 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('swagger-doc', app, document);
+  SwaggerModule.setup('swagger-doc', app, document, {
+    swaggerOptions: { persistAuthorization: true },
+  });
   await app.listen(3000);
 }
 bootstrap();

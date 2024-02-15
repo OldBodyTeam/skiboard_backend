@@ -7,9 +7,15 @@ import { UserModule } from './user/user.module';
 import { CollectionModule } from './collection/collection.module';
 import { FrameModule } from './frame/frame.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import path from 'path';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: path.resolve(process.cwd(), '.env.development'),
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'rm-wz901t3k846t995ofyo.mysql.rds.aliyuncs.com',

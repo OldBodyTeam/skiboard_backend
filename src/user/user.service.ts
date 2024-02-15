@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
@@ -15,9 +15,15 @@ export class UserService {
     return this.usersRepository.find();
   }
 
-  findOne(email_name: string): Promise<User | null> {
+  findOneByEmail(email: string): Promise<User | null> {
     return this.usersRepository.findOne({
-      where: [{ username: email_name }, { email: email_name }],
+      where: [{ username: email }, { email: email }],
+    });
+  }
+
+  async findOneById(userId: string): Promise<User | null> {
+    return this.usersRepository.findOne({
+      where: [{ id: userId }],
     });
   }
 
@@ -31,5 +37,29 @@ export class UserService {
 
   async remove(id: number): Promise<void> {
     await this.usersRepository.delete(id);
+  }
+
+  async modifyAvatar(userId: string, avatarUrl: string) {
+    const userInfo = await this.findOneById(userId);
+    if (!userInfo) {
+      throw new BadRequestException('当前用户不存在', {
+        cause: new Error(),
+        description: 'userId不存在',
+      });
+    }
+    userInfo.avatar = avatarUrl;
+    await this.usersRepository.save(userInfo);
+  }
+
+  async modifyUsername(userId: string, username: string): Promise<User> {
+    const userInfo = await this.findOneById(userId);
+    if (!userInfo) {
+      throw new BadRequestException('当前用户不存在', {
+        cause: new Error(),
+        description: 'userId不存在',
+      });
+    }
+    userInfo.username = username;
+    return await this.usersRepository.save(userInfo);
   }
 }
