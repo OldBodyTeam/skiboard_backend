@@ -11,6 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,
   });
+  app.setGlobalPrefix('api');
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
   const options = new DocumentBuilder()
