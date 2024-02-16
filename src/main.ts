@@ -6,7 +6,12 @@ import { HttpExceptionFilter } from './shared/http-execption.filter';
 import dotenv from 'dotenv';
 import path from 'node:path';
 
-dotenv.config({ path: path.resolve(process.cwd(), '.env.development') });
+dotenv.config({
+  path:
+    process.env.NODE_ENV === 'production'
+      ? path.resolve(process.cwd(), '..', '.env')
+      : path.resolve(process.cwd(), '.env.development'),
+});
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,

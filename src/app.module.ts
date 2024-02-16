@@ -16,11 +16,11 @@ import path from 'path';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'rm-wz901t3k846t995ofyo.mysql.rds.aliyuncs.com',
+      host: process.env.MQSQLHost,
       port: 3306,
-      username: 'test123',
-      password: 'Test123456789',
-      database: 'test123',
+      username: process.env.MYSQLUsername,
+      password: process.env.MYSQLPassword,
+      database: process.env.MYSQLDatabase,
       synchronize: true, // prod 需要注意
       autoLoadEntities: true,
     }),
