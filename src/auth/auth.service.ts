@@ -11,7 +11,10 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(email_name: string, pass: string): Promise<any> {
+  async validateUser(
+    email_name: string,
+    pass: string,
+  ): Promise<{ access_token: string; message: string }> {
     const user = await this.usersService.findOneByEmail(email_name);
     // bcrypt.compare(pass, user.password);
     if (user) {
@@ -37,7 +40,7 @@ export class AuthService {
     }
   }
 
-  async addUser(username: string, email: string, pass: string): Promise<any> {
+  async addUser(username: string, email: string, pass: string): Promise<User> {
     // const bcrypt = require('bcrypt');
     const users = await this.usersService.findOneByEmail(username);
     const emails = await this.usersService.findOneByEmail(email);
