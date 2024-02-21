@@ -1,14 +1,6 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  Injectable,
-  Param,
-  Post,
-} from '@nestjs/common';
+import { Controller, HttpCode, Injectable, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CollectionService } from './collection.service';
-import { CollectionDto } from './dto/collection.dto';
 
 @ApiBearerAuth()
 @ApiTags('collection')

@@ -1,4 +1,4 @@
-import { Collection } from 'src/collection/collection.entity';
+import { CollectionEntity } from 'src/collection/collection.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -22,8 +22,8 @@ export class Frame {
   @UpdateDateColumn()
   updateTime: Date;
 
-  @ManyToOne(() => Collection, (collection) => collection.frames, {
+  @ManyToOne(() => CollectionEntity, (collection) => collection.frames, {
     cascade: true,
   })
-  collection: Collection;
+  collection: CollectionEntity;
 }

@@ -22,6 +22,6 @@ export class CollectionService {
 
   async modifyName(collectionId: string) {
     const user = await this.collectionService.findOneBy({ id: collectionId });
-    this.collectionService.save();
+    this.collectionService.save(user);
   }
 }

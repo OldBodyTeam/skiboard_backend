@@ -1,5 +1,5 @@
 import { IsEmail } from 'class-validator';
-import { Collection } from 'src/collection/collection.entity';
+import { CollectionEntity } from 'src/collection/collection.entity';
 import {
   Entity,
   Column,
@@ -35,6 +35,6 @@ export class User {
   @UpdateDateColumn()
   updateTime: Date;
 
-  @OneToMany((type) => Collection, (collection) => collection.owner)
-  collections: Collection[];
+  @OneToMany(() => CollectionEntity, (collection) => collection.owner)
+  collections: CollectionEntity[];
 }
