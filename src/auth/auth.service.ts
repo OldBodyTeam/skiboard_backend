@@ -21,6 +21,7 @@ export class AuthService {
         return {
           access_token: await this.jwtService.signAsync(payload),
           message: '登录成功',
+          userId: user.id,
         };
       } else {
         const errors = { username: 'Password is wrong.' };

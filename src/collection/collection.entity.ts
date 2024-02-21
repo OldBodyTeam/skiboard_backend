@@ -6,22 +6,30 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class Collection {
+export class CollectionEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
-  @Column({ default: '' })
-  selected_fid: string;
+  // @Column({ type: 'json', nullable: true })
+  // selected_fid: string[][];
 
-  @Column()
+  @Column({ default: 'Smiling Face' })
   name: string;
 
-  @ManyToOne(type => User, (user) => user.collections)
+  @CreateDateColumn()
+  createTime: Date;
+
+  @UpdateDateColumn()
+  updateTime: Date;
+
+  @ManyToOne(() => User, (user) => user.collections, { cascade: true })
   owner: User;
 
-  @OneToMany(type => Frame, (frame) => frame.collection)
+  @OneToMany(() => Frame, (frame) => frame.collection)
   frames: Frame[];
 }

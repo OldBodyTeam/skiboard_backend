@@ -28,4 +28,4 @@ jobs:
             git pull 
             pnpm install
             pnpm run build
-            pm2 reload
+            pm2 start all

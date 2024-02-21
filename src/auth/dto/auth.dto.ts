@@ -9,4 +9,8 @@ export class AuthUserDto {
   @ApiProperty()
   @IsNotEmpty()
   message: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  userId: string;
 }

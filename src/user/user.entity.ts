@@ -8,7 +8,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-
+// https://typeorm.io/entities
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()

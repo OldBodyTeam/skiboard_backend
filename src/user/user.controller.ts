@@ -1,4 +1,13 @@
-import { ApiBearerAuth, ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiParam,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import {
   Body,
   Post,
@@ -12,10 +21,11 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   Logger,
+  Get,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import OSS from 'ali-oss';
 import { Injectable } from '@nestjs/common';
 import { UserAvatarDto } from './dto/user-avatar.dto';
@@ -33,11 +43,24 @@ export class UserController {
     return await this.usersService.create(createUserDto);
   }
   // https://stackoverflow.com/questions/66605192/file-uploading-along-with-other-data-in-swagger-nestjs
-  @Put(':id/avatar')
+  @Post(':id/avatar')
   @HttpCode(200)
-  @ApiConsumes('multipart/form-data')
   @ApiParam({ name: 'id', type: String })
+  @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
+  @ApiExtraModels(CreateUserDto)
+  @ApiOkResponse({
+    status: 'default',
+    description: '根据ID修改用户头像',
+    schema: {
+      type: 'object',
+      properties: {
+        data: { type: 'object', $ref: getSchemaPath(CreateUserDto) },
+        msg: { type: 'string' },
+        code: { type: 'number' },
+      },
+    },
+  })
   // @UseGuards()
   // @UseGuards(JwtAuthGuard)
   async modifyAvatar(
@@ -48,8 +71,9 @@ export class UserController {
         validators: [new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5 })],
       }),
     )
-    file,
-  ): Promise<{ avatarUrl: string }> {
+    file: Express.Multer.File,
+  ) {
+    console.log(file, userId, data);
     // 上传阿里云 新增事务
     try {
       const OSSClient = new OSS({
@@ -63,8 +87,7 @@ export class UserController {
         file.buffer,
       )) as { url: string };
       // 修改
-      await this.usersService.modifyAvatar(userId.id, avatarUrlInfo.url);
-      return { avatarUrl: avatarUrlInfo.url };
+      return await this.usersService.modifyAvatar(userId.id, avatarUrlInfo.url);
     } catch (e) {
       Logger.error(e);
       throw new BadRequestException('阿里云文件上传失败, 更新头像失败');
@@ -74,13 +97,50 @@ export class UserController {
   @Put(':id/username')
   @HttpCode(200)
   @ApiParam({ name: 'id', type: String })
-  @UseInterceptors(FileInterceptor('file'))
+  @ApiExtraModels(CreateUserDto)
+  @ApiOkResponse({
+    status: 'default',
+    description: '根据ID修改用户名',
+    schema: {
+      type: 'object',
+      properties: {
+        data: { type: 'object', $ref: getSchemaPath(CreateUserDto) },
+        msg: { type: 'string' },
+        code: { type: 'number' },
+      },
+    },
+  })
   async modifyUsername(
     @Param() userId: { id: string },
     @Body() data: UsernameDto,
   ): Promise<User> {
     try {
       return await this.usersService.modifyUsername(userId.id, data.username);
+    } catch (e) {
+      Logger.error(e);
+      throw new BadRequestException('修改用户名失败');
+    }
+  }
+
+  @Get(':id')
+  @HttpCode(200)
+  @ApiParam({ name: 'id', type: String })
+  @ApiExtraModels(CreateUserDto)
+  @ApiOkResponse({
+    status: 'default',
+    description: '根据id获取用户信息',
+    schema: {
+      type: 'object',
+      properties: {
+        data: { type: 'object', $ref: getSchemaPath(CreateUserDto) },
+        msg: { type: 'string' },
+        code: { type: 'number' },
+      },
+    },
+  })
+  async user(@Param() userId: { id: string }) {
+    try {
+      return await this.usersService.findOneById(userId.id);
     } catch (e) {
       Logger.error(e);
       throw new BadRequestException('修改用户名失败');

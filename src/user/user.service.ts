@@ -39,7 +39,7 @@ export class UserService {
     await this.usersRepository.delete(id);
   }
 
-  async modifyAvatar(userId: string, avatarUrl: string) {
+  async modifyAvatar(userId: string, avatarUrl: string): Promise<User> {
     const userInfo = await this.findOneById(userId);
     if (!userInfo) {
       throw new BadRequestException('当前用户不存在', {
@@ -48,7 +48,7 @@ export class UserService {
       });
     }
     userInfo.avatar = avatarUrl;
-    await this.usersRepository.save(userInfo);
+    return await this.usersRepository.save(userInfo);
   }
 
   async modifyUsername(userId: string, username: string): Promise<User> {

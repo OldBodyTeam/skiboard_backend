@@ -1,4 +1,26 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Injectable,
+  Param,
+  Post,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import { CollectionService } from './collection.service';
+import { CollectionDto } from './dto/collection.dto';
 
+@ApiBearerAuth()
+@ApiTags('collection')
 @Controller('collection')
-export class CollectionController {}
+@Injectable()
+export class CollectionController {
+  constructor(private readonly collectionService: CollectionService) {}
+
+  @Post(':id/create')
+  @HttpCode(200)
+  @ApiParam({ name: 'id', type: String })
+  async create(@Param() userId: { id: string }) {
+    return await this.collectionService.create(userId.id);
+  }
+}

@@ -4,6 +4,10 @@ import { IsNotEmpty } from 'class-validator';
 export class CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
+  id: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
   username: string;
 
   @ApiProperty()
@@ -16,4 +20,10 @@ export class CreateUserDto {
 
   @ApiProperty()
   avatar: string;
+
+  @ApiProperty()
+  createTime: Date;
+
+  @ApiProperty()
+  updateTime: Date;
 }
