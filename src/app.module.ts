@@ -11,7 +11,10 @@ import path from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: path.resolve(process.cwd(), '.env.development'),
+      envFilePath:
+        process.env.NODE_ENV === 'production'
+          ? path.resolve(process.cwd(), '..', '.env')
+          : path.resolve(process.cwd(), '.env.development'),
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
