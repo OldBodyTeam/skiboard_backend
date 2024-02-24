@@ -1,4 +1,13 @@
-import { Body, Controller, HttpCode, Post, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  UseGuards,
+  UsePipes,
+  Request,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ValidationPipe } from 'src/pipe/validation/validation.pipe';
 import { LoginUserDto } from './dto/login.dto';
@@ -12,6 +21,7 @@ import {
 import { Public } from './auth.decorator';
 import { AuthUserDto } from './dto/auth.dto';
 import { UserEntity } from 'src/user/user.entity';
+import { AuthGuard } from './auth.guard';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -63,5 +73,11 @@ export class AuthController {
       registerInfo.email,
       registerInfo.password,
     );
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 }
