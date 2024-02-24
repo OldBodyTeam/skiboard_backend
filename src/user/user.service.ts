@@ -1,34 +1,33 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/user/user.entity';
+import { UserEntity } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private usersRepository: Repository<UserEntity>,
   ) {}
 
-  findAll(): Promise<User[]> {
+  findAll(): Promise<UserEntity[]> {
     return this.usersRepository.find();
   }
 
-  findOneByEmail(email: string): Promise<User | null> {
+  findOneByEmail(email: string): Promise<UserEntity | null> {
     return this.usersRepository.findOne({
       where: [{ username: email }, { email: email }],
     });
   }
 
-  async findOneById(userId: string): Promise<User | null> {
+  async findOneById(userId: string): Promise<UserEntity | null> {
     return this.usersRepository.findOne({
       where: [{ id: userId }],
     });
   }
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const user = new CreateUserDto();
+  async create(createUserDto: UserEntity): Promise<UserEntity> {
+    const user = new UserEntity();
     user.email = createUserDto.email;
     user.username = createUserDto.username;
     user.password = createUserDto.password;
@@ -39,7 +38,7 @@ export class UserService {
     await this.usersRepository.delete(id);
   }
 
-  async modifyAvatar(userId: string, avatarUrl: string): Promise<User> {
+  async modifyAvatar(userId: string, avatarUrl: string): Promise<UserEntity> {
     const userInfo = await this.findOneById(userId);
     if (!userInfo) {
       throw new BadRequestException('当前用户不存在', {
@@ -51,7 +50,7 @@ export class UserService {
     return await this.usersRepository.save(userInfo);
   }
 
-  async modifyUsername(userId: string, username: string): Promise<User> {
+  async modifyUsername(userId: string, username: string): Promise<UserEntity> {
     const userInfo = await this.findOneById(userId);
     if (!userInfo) {
       throw new BadRequestException('当前用户不存在', {

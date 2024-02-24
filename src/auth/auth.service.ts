@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/user/user.entity';
+import { UserEntity } from 'src/user/user.entity';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { AuthUserDto } from './dto/auth.dto';
@@ -39,7 +39,11 @@ export class AuthService {
     }
   }
 
-  async addUser(username: string, email: string, pass: string): Promise<User> {
+  async addUser(
+    username: string,
+    email: string,
+    pass: string,
+  ): Promise<UserEntity> {
     // const bcrypt = require('bcrypt');
     const users = await this.usersService.findOneByEmail(username);
     const emails = await this.usersService.findOneByEmail(email);
@@ -56,7 +60,7 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
     } else {
-      const newUser = new User();
+      const newUser = new UserEntity();
       newUser.username = username;
       newUser.email = email;
       const saltOrRounds = 10;

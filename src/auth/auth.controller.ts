@@ -10,8 +10,8 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { Public } from './auth.decorator';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { AuthUserDto } from './dto/auth.dto';
+import { UserEntity } from 'src/user/user.entity';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -51,13 +51,13 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
-        data: { type: 'object', $ref: getSchemaPath(CreateUserDto) },
+        data: { type: 'object', $ref: getSchemaPath(UserEntity) },
         msg: { type: 'string' },
         code: { type: 'number' },
       },
     },
   })
-  register(@Body() registerInfo: RegisterUserDto): Promise<CreateUserDto> {
+  register(@Body() registerInfo: RegisterUserDto): Promise<UserEntity> {
     return this.authService.addUser(
       registerInfo.username,
       registerInfo.email,

@@ -4,13 +4,13 @@ import { CollectionController } from './collection.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CollectionEntity } from './collection.entity';
 import { UserService } from 'src/user/user.service';
-import { User } from 'src/user/user.entity';
+import { UserEntity } from 'src/user/user.entity';
 // import { UserService } from 'src/user/user.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([CollectionEntity]),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([UserEntity]),
   ],
   providers: [CollectionService, UserService],
   controllers: [CollectionController],

@@ -1,5 +1,5 @@
-import { Frame } from 'src/frame/frame.entity';
-import { User } from 'src/user/user.entity';
+import { FrameEntity } from 'src/frame/frame.entity';
+import { UserEntity } from 'src/user/user.entity';
 import {
   Entity,
   Column,
@@ -8,28 +8,33 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 
 @Entity()
 export class CollectionEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  // @Column({ type: 'json', nullable: true })
-  // selected_fid: string[][];
 
   @Column({ default: 'Smiling Face' })
   name: string;
 
-  @CreateDateColumn()
-  createTime: Date;
+  @CreateDateColumn({ name: 'createAt' })
+  createAt: string;
 
-  @UpdateDateColumn()
-  updateTime: Date;
+  @UpdateDateColumn({ name: 'updateAt' })
+  updateAt: string;
 
-  @ManyToOne(() => User, (user) => user.collections, { cascade: true })
-  owner: User;
+  @DeleteDateColumn({ name: 'deleteAt' })
+  deleteAt: string;
 
-  @OneToMany(() => Frame, (frame) => frame.collection)
-  frames: Frame[];
+  @ManyToOne(() => UserEntity, (user) => user.collections, {
+    orphanedRowAction: 'delete',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  owner: UserEntity;
+
+  @OneToMany(() => FrameEntity, (frame) => frame.collection)
+  frames: FrameEntity[];
 }

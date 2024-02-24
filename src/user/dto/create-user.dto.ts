@@ -3,7 +3,7 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'user id' })
   id: string;
 
   @ApiProperty()
@@ -22,8 +22,8 @@ export class CreateUserDto {
   avatar: string;
 
   @ApiProperty()
-  createTime: Date;
+  createTime: string;
 
   @ApiProperty()
-  updateTime: Date;
+  updateTime: string;
 }

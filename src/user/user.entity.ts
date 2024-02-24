@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail } from 'class-validator';
 import { CollectionEntity } from 'src/collection/collection.entity';
 import {
@@ -7,34 +8,42 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 // https://typeorm.io/entities
 @Entity()
-export class User {
-  @PrimaryGeneratedColumn()
+export class UserEntity {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ name: 'username', nullable: false })
   username: string;
 
-  @Column()
+  @Column({ name: 'email', nullable: false })
   @IsEmail()
   email: string;
 
-  @Column()
+  @Column({ name: 'password', nullable: false })
   password: string;
 
   @Column({
     default: 'https://ski-music.oss-cn-beijing.aliyuncs.com/avatar/avatar.png',
+    name: 'avatar',
   })
   avatar: string;
 
-  @CreateDateColumn()
-  createTime: Date;
+  @CreateDateColumn({ name: 'createAt' })
+  createAt: string;
 
-  @UpdateDateColumn()
-  updateTime: Date;
+  @UpdateDateColumn({ name: 'updateAt' })
+  updateAt: string;
 
-  @OneToMany(() => CollectionEntity, (collection) => collection.owner)
+  @DeleteDateColumn({ name: 'deleteAt' })
+  deleteAt: string;
+
+  @OneToMany(() => CollectionEntity, (collection) => collection.owner, {
+    cascade: true,
+    eager: true,
+  })
   collections: CollectionEntity[];
 }

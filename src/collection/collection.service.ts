@@ -15,13 +15,30 @@ export class CollectionService {
   async create(id: string) {
     const user = await this.usersService.findOneById(id);
     const collection = new CollectionEntity();
-    user.collections.push(collection);
-    const userInfo = await this.usersService.create(user);
-    return { userInfo, collection };
+    collection.owner = user;
+    // if (user.collections && Array.isArray(user.collections)) {
+    //   user.collections = [...user.collections, collection];
+    // } else {
+    //   user.collections = [collection];
+    // }
+    const collectionInfo = await this.collectionService.save(collection);
+    // const userInfo = await this.usersService.create(user);
+    return { user, collection: collectionInfo };
   }
 
-  async modifyName(collectionId: string) {
-    const user = await this.collectionService.findOneBy({ id: collectionId });
-    this.collectionService.save(user);
+  async modifyName(collectionId: string, collectionName: string) {
+    const collection = await this.collectionService.findOneBy({
+      id: collectionId,
+    });
+    collection.name = collectionName;
+    return this.collectionService.save(collection);
+  }
+
+  async deleteCollection(collectionId: string) {
+    return this.collectionService.delete(collectionId);
+  }
+
+  async fineOneById(collectionId: string) {
+    return this.collectionService.findOneBy({ id: collectionId });
   }
 }

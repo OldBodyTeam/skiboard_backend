@@ -6,21 +6,25 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class Frame {
-  @PrimaryGeneratedColumn()
+export class FrameEntity {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'json', nullable: true })
-  selected_fid: string[][];
+  selected_fid: number[][];
 
-  @CreateDateColumn()
-  createTime: Date;
+  @CreateDateColumn({ name: 'createAt' })
+  createAt: string;
 
-  @UpdateDateColumn()
-  updateTime: Date;
+  @UpdateDateColumn({ name: 'updateAt' })
+  updateAt: string;
+
+  @DeleteDateColumn({ name: 'deleteAt' })
+  deleteAt: string;
 
   @ManyToOne(() => CollectionEntity, (collection) => collection.frames, {
     cascade: true,

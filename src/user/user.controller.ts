@@ -1,6 +1,5 @@
 import {
   ApiBearerAuth,
-  ApiBody,
   ApiConsumes,
   ApiExtraModels,
   ApiOkResponse,
@@ -25,12 +24,12 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
-import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import OSS from 'ali-oss';
 import { Injectable } from '@nestjs/common';
 import { UserAvatarDto } from './dto/user-avatar.dto';
 import { UsernameDto } from './dto/username.dto';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 @ApiBearerAuth()
 @ApiTags('user')
 @Controller('user')
@@ -39,8 +38,8 @@ export class UserController {
   constructor(private readonly usersService: UserService) {}
   @Post()
   @HttpCode(200)
-  async create(@Body() createUserDto: CreateUserDto) {
-    return await this.usersService.create(createUserDto);
+  async create(@Body() user: UserEntity) {
+    return await this.usersService.create(user);
   }
   // https://stackoverflow.com/questions/66605192/file-uploading-along-with-other-data-in-swagger-nestjs
   @Post(':id/avatar')
@@ -73,7 +72,6 @@ export class UserController {
     )
     file: Express.Multer.File,
   ) {
-    console.log(file, userId, data);
     // 上传阿里云 新增事务
     try {
       const OSSClient = new OSS({
@@ -113,7 +111,7 @@ export class UserController {
   async modifyUsername(
     @Param() userId: { id: string },
     @Body() data: UsernameDto,
-  ): Promise<User> {
+  ): Promise<UserEntity> {
     try {
       return await this.usersService.modifyUsername(userId.id, data.username);
     } catch (e) {
