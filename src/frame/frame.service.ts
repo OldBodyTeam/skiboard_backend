@@ -11,15 +11,15 @@ export class FrameService {
     @InjectRepository(FrameEntity)
     private frameService: Repository<FrameEntity>,
   ) {}
-  async create(collectionId: string) {
-    const collection = await this.collectionService.fineOneById(collectionId);
+  async create() {
+    // const collection = await this.collectionService.fineOneById(collectionId);
     const frame = new FrameEntity();
-    frame.collection = collection;
+    // frame.collection = collection;
     frame.selected_fid = [];
     return this.frameService.save(frame);
   }
 
-  async update(frameId: string, frameData: number[][]) {
+  async update(frameId: string, frameData: number[]) {
     const frame = await this.frameService.findOneBy({ id: frameId });
     frame.selected_fid = frameData;
     return this.frameService.save(frame);

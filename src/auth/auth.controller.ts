@@ -74,10 +74,29 @@ export class AuthController {
       registerInfo.password,
     );
   }
-
+  // husbend
+  @Public()
   @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
+  @HttpCode(200)
+  @ApiOkResponse({
+    status: 'default',
+    description: 'The record has been successfully created.',
+    schema: {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'object',
+          properties: {
+            sub: { type: 'string' },
+          },
+        },
+        msg: { type: 'string' },
+        code: { type: 'number' },
+      },
+    },
+  })
+  getProfile(@Request() req): Promise<{ sub: string }> {
     return req.user;
   }
 }

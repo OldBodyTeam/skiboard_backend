@@ -33,13 +33,13 @@ export class UserEntity {
   avatar: string;
 
   @CreateDateColumn({ name: 'createAt' })
-  createAt: string;
+  createAt: Date;
 
   @UpdateDateColumn({ name: 'updateAt' })
-  updateAt: string;
+  updateAt: Date;
 
   @DeleteDateColumn({ name: 'deleteAt' })
-  deleteAt: string;
+  deleteAt: Date;
 
   @OneToMany(() => CollectionEntity, (collection) => collection.owner, {
     cascade: true,

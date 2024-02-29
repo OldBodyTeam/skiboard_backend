@@ -1,8 +1,8 @@
-import { CollectionEntity } from 'src/collection/collection.entity';
+// import { CollectionEntity } from 'src/collection/collection.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
-  ManyToOne,
+  // ManyToOne,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
@@ -14,20 +14,20 @@ export class FrameEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'json', nullable: true })
-  selected_fid: number[][];
+  @Column({ type: 'json', nullable: true, default: [] })
+  selected_fid: number[];
 
-  @CreateDateColumn({ name: 'createAt' })
-  createAt: string;
+  // @CreateDateColumn({ name: 'createAt' })
+  // createAt: string;
 
-  @UpdateDateColumn({ name: 'updateAt' })
-  updateAt: string;
+  // @UpdateDateColumn({ name: 'updateAt' })
+  // updateAt: string;
 
-  @DeleteDateColumn({ name: 'deleteAt' })
-  deleteAt: string;
+  // @DeleteDateColumn({ name: 'deleteAt' })
+  // deleteAt: string;
 
-  @ManyToOne(() => CollectionEntity, (collection) => collection.frames, {
-    cascade: true,
-  })
-  collection: CollectionEntity;
+  // @ManyToOne(() => CollectionEntity, (collection) => collection.frames, {
+  //   cascade: true,
+  // })
+  // collection: CollectionEntity;
 }

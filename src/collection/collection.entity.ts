@@ -19,14 +19,17 @@ export class CollectionEntity {
   @Column({ default: 'Smiling Face' })
   name: string;
 
+  @Column({ type: 'longtext' })
+  frameList: string;
+
   @CreateDateColumn({ name: 'createAt' })
-  createAt: string;
+  createAt: Date;
 
   @UpdateDateColumn({ name: 'updateAt' })
-  updateAt: string;
+  updateAt: Date;
 
   @DeleteDateColumn({ name: 'deleteAt' })
-  deleteAt: string;
+  deleteAt: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.collections, {
     orphanedRowAction: 'delete',
@@ -34,7 +37,4 @@ export class CollectionEntity {
     onUpdate: 'CASCADE',
   })
   owner: UserEntity;
-
-  @OneToMany(() => FrameEntity, (frame) => frame.collection)
-  frames: FrameEntity[];
 }

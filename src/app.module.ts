@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 // import { User } from './user.entity';
 import { CollectionModule } from './collection/collection.module';
-import { FrameModule } from './frame/frame.module';
+// import { FrameModule } from './frame/frame.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import path from 'path';
@@ -29,7 +29,7 @@ import path from 'path';
     }),
     UserModule,
     CollectionModule,
-    FrameModule,
+    // FrameModule,
     AuthModule,
   ],
 })
