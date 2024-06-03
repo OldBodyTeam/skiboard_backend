@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -15,6 +16,7 @@ import {
   ApiExtraModels,
   ApiOkResponse,
   ApiParam,
+  ApiQuery,
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
@@ -210,5 +212,32 @@ export class CollectionController {
       ...res,
       frameList: JSON.parse(res.frameList),
     };
+  }
+  @Get('list/collection')
+  @HttpCode(200)
+  @ApiQuery({ name: 'pageSize', type: 'number', required: true })
+  @ApiQuery({ name: 'pageNumber', type: 'number', required: true })
+  @ApiOkResponse({
+    status: 'default',
+    description: '根据ID修改集合名称',
+    schema: {
+      type: 'object',
+      properties: {
+        data: { type: 'object', $ref: getSchemaPath(CollectionEntity) },
+        msg: { type: 'string' },
+        code: { type: 'number' },
+      },
+    },
+  })
+  async getCollectionAllList(
+    @Query('pageSize') pageSize: number,
+    @Query('pageNumber') pageNumber: number,
+  ) {
+    const res = await this.collectionService.getCollectionAllList(
+      pageSize,
+      pageNumber,
+    );
+    console.log(res);
+    return res;
   }
 }

@@ -29,7 +29,6 @@ export class CollectionService {
     const collection = await this.collectionService.findOneBy({
       id: collectionId,
     });
-    console.log(Object.assign(collection, data));
     Object.assign(collection, data);
     return this.collectionService.save(collection);
   }
@@ -67,11 +66,24 @@ export class CollectionService {
     const owner = await this.usersService.findOneById(userId);
 
     return owner.collections.map((v) => {
-      console.log(v.frameList);
       return {
         ...v,
         frameList: JSON.parse(v.frameList),
       };
     });
+  }
+  async getCollectionAllList(pageSize: number, pageNumber: number) {
+    const queryBuilder =
+      await this.collectionService.createQueryBuilder('collection');
+    queryBuilder.skip((pageSize - 1) * pageNumber).take(pageNumber);
+    const itemCount = await queryBuilder.getCount();
+    const { entities } = await queryBuilder.getRawAndEntities();
+    const canUseData = entities.map((item) => {
+      return {
+        ...item,
+        frameList: JSON.parse(item.frameList),
+      };
+    });
+    return { data: canUseData, total: itemCount };
   }
 }
