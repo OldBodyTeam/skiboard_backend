@@ -84,6 +84,7 @@ export class UserController {
         `avatar/${userId.id}/${file.originalname}`,
         file.buffer,
       )) as { url: string };
+      console.log(avatarUrlInfo);
       // 修改
       return await this.usersService.modifyAvatar(userId.id, avatarUrlInfo.url);
     } catch (e) {
