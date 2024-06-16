@@ -22,6 +22,7 @@ import { Public } from './auth.decorator';
 import { AuthUserDto } from './dto/auth.dto';
 import { UserEntity } from 'src/user/user.entity';
 import { AuthGuard } from './auth.guard';
+import { modifyPasswordDto } from './dto/modify-password.dto';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -98,5 +99,27 @@ export class AuthController {
   })
   getProfile(@Request() req): Promise<{ sub: string }> {
     return req.user;
+  }
+  // 修改密码
+  @Public()
+  @Post('modify-password')
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @ApiOkResponse({
+    status: 'default',
+    description: 'The record has been successfully created.',
+    schema: {
+      type: 'object',
+      properties: {
+        data: { type: 'object', $ref: getSchemaPath(UserEntity) },
+        msg: { type: 'string' },
+        code: { type: 'number' },
+      },
+    },
+  })
+  modifyPassword(
+    @Body() modifyPassword: modifyPasswordDto,
+  ): Promise<UserEntity> {
+    return this.authService.modifyPassword(modifyPassword);
   }
 }

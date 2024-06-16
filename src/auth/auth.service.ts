@@ -4,6 +4,7 @@ import { UserEntity } from 'src/user/user.entity';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { AuthUserDto } from './dto/auth.dto';
+import { modifyPasswordDto } from './dto/modify-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -66,6 +67,26 @@ export class AuthService {
       const saltOrRounds = 10;
       newUser.password = bcrypt.hashSync(pass, saltOrRounds);
       return this.usersService.create(newUser);
+    }
+  }
+  async modifyPassword(modifyPassword: modifyPasswordDto) {
+    const user = await this.usersService.findOneByEmail(modifyPassword.email);
+    if (user) {
+      const newUser = new UserEntity();
+      newUser.username = user.username;
+      newUser.email = user.email;
+      const saltOrRounds = 10;
+      newUser.password = bcrypt.hashSync(
+        modifyPassword.passwordOne,
+        saltOrRounds,
+      );
+      return this.usersService.create(newUser);
+    } else {
+      const errors = { username: 'Email must be unique.' };
+      throw new HttpException(
+        { message: 'Input data validation failed', errors },
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }
