@@ -25,17 +25,31 @@ export class AuthService {
           userId: user.id,
         };
       } else {
-        const errors = { username: 'Password is wrong.' };
         throw new HttpException(
-          { message: 'Input data validation failed', errors },
+          {
+            status: HttpStatus.BAD_REQUEST,
+            message: '密码错误',
+            code: 'PasswordError',
+          },
           HttpStatus.BAD_REQUEST,
+          {
+            cause: new Error('密码错误'),
+            description: 'PasswordError',
+          },
         );
       }
     } else {
-      const errors = { email_name: 'Username/email is invalid.' };
       throw new HttpException(
-        { message: 'Input data validation failed', errors },
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: '用户名或者邮箱不存在，请确认后登录',
+          code: 'LoginUserNotFound',
+        },
         HttpStatus.BAD_REQUEST,
+        {
+          cause: new Error('用户名或者邮箱不存在，请确认后登录'),
+          description: 'LoginUserNotFound',
+        },
       );
     }
   }
@@ -45,20 +59,32 @@ export class AuthService {
     email: string,
     pass: string,
   ): Promise<UserEntity> {
-    // const bcrypt = require('bcrypt');
     const users = await this.usersService.findOneByEmail(username);
     const emails = await this.usersService.findOneByEmail(email);
     if (users) {
-      const errors = { username: 'Username must be unique.' };
       throw new HttpException(
-        { message: 'Input data validation failed', errors },
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: '用户名已被注册，请重新注册',
+          code: 'UsernameRepeat',
+        },
         HttpStatus.BAD_REQUEST,
+        {
+          cause: new Error('Username must be unique'),
+          description: 'UsernameRepeat',
+        },
       );
     } else if (emails) {
-      const errors = { username: 'Email must be unique.' };
       throw new HttpException(
-        { message: 'Input data validation failed', errors },
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: '邮箱已被注册，请重新注册',
+        },
         HttpStatus.BAD_REQUEST,
+        {
+          cause: new Error('Email must be unique'),
+          description: 'EmailRepeat',
+        },
       );
     } else {
       const newUser = new UserEntity();
@@ -82,10 +108,16 @@ export class AuthService {
       );
       return this.usersService.create(newUser);
     } else {
-      const errors = { username: 'Email must be unique.' };
       throw new HttpException(
-        { message: 'Input data validation failed', errors },
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: '用户不存在，无法修改密码',
+        },
         HttpStatus.BAD_REQUEST,
+        {
+          cause: new Error('user not found'),
+          description: 'UserNotFount',
+        },
       );
     }
   }
