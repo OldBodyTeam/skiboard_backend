@@ -17,7 +17,7 @@ import { UserEntity } from 'src/user/user.entity';
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: {
-        expiresIn: '4h',
+        expiresIn: '7 days',
       },
     }),
   ],
