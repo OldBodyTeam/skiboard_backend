@@ -1,11 +1,9 @@
-import { FrameEntity } from 'src/frame/frame.entity';
 import { UserEntity } from 'src/user/user.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,

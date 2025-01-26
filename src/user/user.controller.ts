@@ -21,6 +21,7 @@ import {
   MaxFileSizeValidator,
   Logger,
   Get,
+  Delete,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
@@ -142,7 +143,31 @@ export class UserController {
       return await this.usersService.findOneById(userId.id);
     } catch (e) {
       Logger.error(e);
-      throw new BadRequestException('修改用户名失败');
+      throw new BadRequestException('获取用户信息失败');
+    }
+  }
+
+  @Delete(':id')
+  @HttpCode(200)
+  @ApiParam({ name: 'id', type: String })
+  @ApiOkResponse({
+    status: 'default',
+    description: '根据ID删除用户',
+    schema: {
+      type: 'object',
+      properties: {
+        msg: { type: 'string' },
+        code: { type: 'number' },
+      },
+    },
+  })
+  async deleteUser(@Param() userId: { id: string }) {
+    try {
+      await this.usersService.delete(userId.id);
+      return { msg: '用户删除成功', code: 200 };
+    } catch (e) {
+      Logger.error(e);
+      throw new BadRequestException('用户删除失败');
     }
   }
 }

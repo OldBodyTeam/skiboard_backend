@@ -17,14 +17,14 @@ export class FrameEntity {
   @Column({ type: 'json', nullable: true, default: [] })
   selected_fid: number[];
 
-  // @CreateDateColumn({ name: 'createAt' })
-  // createAt: string;
+  @CreateDateColumn({ name: 'createAt' })
+  createAt: Date;
 
-  // @UpdateDateColumn({ name: 'updateAt' })
-  // updateAt: string;
+  @UpdateDateColumn({ name: 'updateAt' })
+  updateAt: Date;
 
-  // @DeleteDateColumn({ name: 'deleteAt' })
-  // deleteAt: string;
+  @DeleteDateColumn({ name: 'deleteAt' })
+  deleteAt: Date;
 
   // @ManyToOne(() => CollectionEntity, (collection) => collection.frames, {
   //   cascade: true,
